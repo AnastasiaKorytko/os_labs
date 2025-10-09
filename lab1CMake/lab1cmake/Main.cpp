@@ -38,6 +38,5 @@ int main() {
     CloseHandle(hReporter);
 
     makeReport(report_filename);
-
     return 0;
 }
