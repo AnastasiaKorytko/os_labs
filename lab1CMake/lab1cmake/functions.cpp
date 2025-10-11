@@ -1,24 +1,32 @@
-#include "employee.h"
-#include <fstream>
+#include "functions.h"
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <iomanip>
 
-void makeBinFile(std::string binary_filename) {
+void printEmployee(const employee& e, double rate) {
+    std::cout << std::setw(8) << e.num
+        << std::setw(12) << e.name
+        << std::setw(8) << e.hours
+        << std::setw(12) << e.salary(rate)
+        << std::endl;
+}
+
+void makeBinFile(const std::string& binary_filename) {
     std::ifstream infile(binary_filename.c_str(), std::ios::binary);
     if (!infile) {
         std::cerr << "Error opening binary file: " << binary_filename << std::endl;
-        return; 
+        return;
     }
 
     std::cout << "Contents of the binary file:" << std::endl;
     employee emp;
     while (infile.read(reinterpret_cast<char*>(&emp), sizeof(emp))) {
-        std::cout << emp.num << " " << emp.name << " " << emp.hours << std::endl;
+        printEmployee(emp, 0.0); 
     }
     infile.close();
 }
 
-void makeReport(std::string report_filename) {
+void makeReport(const std::string& report_filename) {
     std::ifstream report(report_filename.c_str());
     if (!report) {
         std::cerr << "Error opening report file: " << report_filename << std::endl;

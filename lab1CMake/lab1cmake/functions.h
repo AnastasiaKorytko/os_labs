@@ -1,4 +1,7 @@
 #pragma once
 #include <string>
-void makeBinFile(std::string binary_filename);
-void makeReport(std::string report_filename);
+#include "employee.h"
+
+void makeBinFile(const std::string& binary_filename);
+void makeReport(const std::string& report_filename);
+void printEmployee(const employee& e, double rate);
