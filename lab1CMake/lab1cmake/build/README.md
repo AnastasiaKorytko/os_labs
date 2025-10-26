@@ -1,10 +1,10 @@
-Ћабораторна€ работа є1 Ч —оздание процессов
+Laboratory Work є1 Ч Process Creation
 
-## –еализовано
-- ”тилита **Creator** Ч создаЄт бинарный файл с запис€ми о сотрудниках.
-- ”тилита **Reporter** Ч создаЄт текстовый отчЄт с расчЄтом зарплат.
-- ѕрограмма **Main** Ч управл€ет запуском Creator и Reporter.
-- **Unit Tests** Ч тестируют корректность функций makeBinFile() и makeReport().
-
-## —тандарт
+## Implemented
+- Creator Utility Ч creates a binary file containing employee records.
+- Reporter Utility Ч generates a text report with salary calculations.
+- Main Program Ч manages the execution of Creator and Reporter.
+- Unit Tests Ч verify the correctness of the makeBinFile() and makeReport() functions.
+- 
+## Standard
 - C++98
