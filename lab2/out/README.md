@@ -1,21 +1,21 @@
-# Лабораторная работа №2 — Создание потоков
+# Lab #2 вЂ” Creating Threads
 
-Программа реализует многопоточные вычисления над массивом чисел:
-- поиск минимального и максимального элементов;
-- вычисление среднего значения;
-- замена минимального и максимального элементов на среднее.
+The program performs multithreaded calculations on an array of numbers:
+- Finding the minimum and maximum elements;
+- Calculating average values;
+- Replacing the minimum and maximum elements with the average.
 
-## Реализовано
-- **Класс `Array`** — хранит массив, а также вычисленные значения `minVal`, `maxVal` и `avg`.
-- **Потоки:**
-  - `MinMaxThread` — находит минимальный и максимальный элементы;
-  - `AverageThread` — вычисляет среднее значение;
-  - `ReplaceThread` — заменяет минимальный и максимальный элементы средним (округлённым) значением.
-- **Программа `Main`** — создаёт потоки, синхронизирует их выполнение и выводит итоговый результат.
-- **Unit Tests** — реализованы с использованием GoogleTest:
-  - проверка корректности вычисления минимума и максимума;
-  - проверка корректности вычисления среднего значения;
-  - проверка правильности замены элементов.
+## Implemented
+- **`Array`` class** вЂ” stores the array, as well as the calculated values вЂ‹вЂ‹of `minVal`, `maxVal`, and `avg`.
+- **Threads:**
+- `MinMaxThread` вЂ” finds creatives and maximum elements;
+- `AverageThread` вЂ” calculates the average value;
+- `ReplaceThread` вЂ” replaces properties and maximum elements with (rounded) values.
+- **`Main`` program** вЂ” creates threads, synchronizes their execution, and outputs the final result.
+- **Unit tests** вЂ” implemented using GoogleTest:
+- checking the correctness of minimum and maximum calculations;
+- checking the correctness of average values;
+- checking the correctness of element replacements.
 
-## Стандарт
+## Standard
 - C++98
