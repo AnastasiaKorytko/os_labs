@@ -3,16 +3,14 @@
 #include <thread>
 #include <algorithm>
 
-using marker_lab::MarkerArray;
-
 TEST(MarkerArrayTest, InitializesWithZeros) {
     const std::size_t N = 5;
     MarkerArray a(N);
     auto copy = a.copy();
 
     EXPECT_EQ(copy.size(), N);
-    EXPECT_TRUE(std::all_of(copy.begin(), copy.end(), [](int v) { 
-        return v == 0; 
+    EXPECT_TRUE(std::all_of(copy.begin(), copy.end(), [](int v) {
+        return v == 0;
         }));
 }
 
@@ -57,7 +55,6 @@ TEST(MarkerArrayTest, ThreadSafetyStress) {
     MarkerArray a(50);
     const int marker_id = 7;
     std::vector<std::thread> thr;
-
     for (int i = 0; i < 8; ++i) {
         thr.emplace_back([&a, marker_id]() {
             for (int k = 0; k < 1000; k++) {
@@ -67,8 +64,9 @@ TEST(MarkerArrayTest, ThreadSafetyStress) {
             });
     }
     for (auto& t : thr) t.join();
+
     auto copy = a.copy();
     EXPECT_EQ(copy.size(), 50u);
-    for (int v : copy) 
+    for (int v : copy)
         EXPECT_TRUE(v == 0 || v == marker_id);
 }

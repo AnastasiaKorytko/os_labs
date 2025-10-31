@@ -3,8 +3,6 @@
 #include <string>
 
 int main() {
-    using namespace marker_lab;
-
     try {
         std::size_t array_size = 0;
         std::cout << ARRAY_SIZE;
@@ -28,6 +26,7 @@ int main() {
             controller.wait_all_waiting();
             std::cout << "Array copy before termination:" << std::endl;
             controller.print_array(std::cout);
+
             std::size_t id = 0;
             while (true) {
                 std::cout << "Enter marker id to terminate ";
