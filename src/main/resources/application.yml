@@ -1,13 +1,24 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
+  application:
+    name: todo-monolith
+
   datasource:
     url: jdbc:sqlite:tasks.db
     driver-class-name: org.sqlite.JDBC
+    username: sa
+    password:
 
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics

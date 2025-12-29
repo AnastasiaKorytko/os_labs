@@ -1,5 +1,7 @@
 package org.example;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,48 +11,48 @@ import java.util.Optional;
 @Service
 public class TaskService {
 
-    private final TaskRepository repos;
+    private final TaskRepository repository;
 
     public TaskService(TaskRepository repository) {
-        this.repos = repository;
+        this.repository = repository;
     }
 
     public List<Task> getAll() {
-        return repos.findAll();
+        return repository.findAll();
     }
 
+    @Cacheable(value = "tasks", key = "#id")
     public Optional<Task> getById(Long id) {
-        return repos.findById(id);
+        System.out.println(" Database query for ID: " + id);
+        return repository.findById(id);
     }
 
     public Task create(Task task) {
-        return repos.save(task);
+        return repository.save(task);
     }
 
+    @CacheEvict(value = "tasks", key = "#id")
     public Task update(Long id, Task task) {
         task.setId(id);
-        return repos.save(task);
+        return repository.save(task);
     }
 
+    @CacheEvict(value = "tasks", key = "#id")
     public Task patch(Long id, Map<String, String> updates) {
-        Task task = repos.findById(id).orElse(null);
-        if (task == null) return null;
+        Task task = repository.findById(id).orElse(null);
+        if (task == null)
+            return null;
+        if (updates.containsKey("title")) task.setTitle(updates.get("title"));
+        if (updates.containsKey("description")) task.setDescription(updates.get("description"));
+        if (updates.containsKey("status")) task.setStatus(updates.get("status"));
 
-        if (updates.containsKey("title"))
-            task.setTitle(updates.get("title"));
-
-        if (updates.containsKey("description"))
-            task.setDescription(updates.get("description"));
-
-        if (updates.containsKey("status"))
-            task.setStatus(updates.get("status"));
-
-        return repos.save(task);
+        return repository.save(task);
     }
 
+    @CacheEvict(value = "tasks", key = "#id")
     public boolean delete(Long id) {
-        if (!repos.existsById(id)) return false;
-        repos.deleteById(id);
+        if (!repository.existsById(id)) return false;
+        repository.deleteById(id);
         return true;
     }
 }

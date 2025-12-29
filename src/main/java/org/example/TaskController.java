@@ -34,33 +34,21 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> update(
-            @PathVariable Long id,
-            @RequestBody Task task) {
-
-        if (service.getById(id).isEmpty())
-            return ResponseEntity.notFound().build();
-
+    public ResponseEntity<Task> update(@PathVariable Long id, @RequestBody Task task) {
+        if (service.getById(id).isEmpty()) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(service.update(id, task));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Task> patch(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> updates) {
-
+    public ResponseEntity<Task> patch(@PathVariable Long id, @RequestBody Map<String, String> updates) {
         Task updated = service.patch(id, updates);
-        if (updated == null)
-            return ResponseEntity.notFound().build();
-
+        if (updated == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!service.delete(id))
-            return ResponseEntity.notFound().build();
-
+        if (!service.delete(id)) return ResponseEntity.notFound().build();
         return ResponseEntity.noContent().build();
     }
 }
