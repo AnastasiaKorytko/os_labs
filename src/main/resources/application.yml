@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   datasource:
     url: jdbc:sqlite:tasks.db
@@ -8,8 +11,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-  security:
-    user:
-      name: admin
-      password: admin123
