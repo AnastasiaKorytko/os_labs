@@ -10,12 +10,14 @@ spring:
     driver-class-name: org.sqlite.JDBC
     username: sa
     password:
-
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  rabbitmq:
+    addresses: amqps://waastaxd:4qF4dGv1OxcQZk7Mf7Ih5_tIuvdJ0urs@stingray.rmq.cloudamqp.com/waastaxd
 
 management:
   endpoints:

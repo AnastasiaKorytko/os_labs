@@ -1,5 +1,6 @@
 package org.example;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository repository;
+    private final RabbitTemplate rabbitTemplate;
 
-    public TaskService(TaskRepository repository) {
+    public TaskService(TaskRepository repository, RabbitTemplate rabbitTemplate) {
         this.repository = repository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public List<Task> getAll() {
@@ -28,7 +31,10 @@ public class TaskService {
     }
 
     public Task create(Task task) {
-        return repository.save(task);
+        Task savedTask = repository.save(task);
+        String msg = "Создана задача: " + savedTask.getTitle() + " (ID: " + savedTask.getId() + ")";
+        rabbitTemplate.convertAndSend("taskQueue", msg);
+        return savedTask;
     }
 
     @CacheEvict(value = "tasks", key = "#id")
@@ -42,16 +48,20 @@ public class TaskService {
         Task task = repository.findById(id).orElse(null);
         if (task == null)
             return null;
-        if (updates.containsKey("title")) task.setTitle(updates.get("title"));
-        if (updates.containsKey("description")) task.setDescription(updates.get("description"));
-        if (updates.containsKey("status")) task.setStatus(updates.get("status"));
+        if (updates.containsKey("title"))
+            task.setTitle(updates.get("title"));
+        if (updates.containsKey("description"))
+            task.setDescription(updates.get("description"));
+        if (updates.containsKey("status"))
+            task.setStatus(updates.get("status"));
 
         return repository.save(task);
     }
 
     @CacheEvict(value = "tasks", key = "#id")
     public boolean delete(Long id) {
-        if (!repository.existsById(id)) return false;
+        if (!repository.existsById(id))
+            return false;
         repository.deleteById(id);
         return true;
     }
