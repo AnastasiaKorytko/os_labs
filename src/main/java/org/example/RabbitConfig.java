@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     @Bean
     public Queue taskQueue() {
-        return new Queue("taskQueue", false);
+        return new Queue(TaskService.TASK_QUEUE, false);
     }
 }

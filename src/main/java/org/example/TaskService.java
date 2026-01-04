@@ -12,6 +12,9 @@ import java.util.Optional;
 @Service
 public class TaskService {
 
+    public static final String TASK_QUEUE = "taskQueue";
+    public static final String CACHE_NAME = "tasks";
+
     private final TaskRepository repository;
     private final RabbitTemplate rabbitTemplate;
 
@@ -24,45 +27,45 @@ public class TaskService {
         return repository.findAll();
     }
 
-    @Cacheable(value = "tasks", key = "#id")
+    @Cacheable(value = CACHE_NAME, key = "#id")
     public Optional<Task> getById(Long id) {
-        System.out.println(" Database query for ID: " + id);
+        System.out.println(" [Log] Database query for ID: " + id);
         return repository.findById(id);
     }
 
     public Task create(Task task) {
         Task savedTask = repository.save(task);
-        String msg = "Создана задача: " + savedTask.getTitle() + " (ID: " + savedTask.getId() + ")";
-        rabbitTemplate.convertAndSend("taskQueue", msg);
+        String msg = "The task has been created: " + savedTask.getTitle() + " (ID: " + savedTask.getId() + ")";
+
+        rabbitTemplate.convertAndSend(TASK_QUEUE, msg);
+
         return savedTask;
     }
 
-    @CacheEvict(value = "tasks", key = "#id")
+    @CacheEvict(value = CACHE_NAME, key = "#id")
     public Task update(Long id, Task task) {
         task.setId(id);
         return repository.save(task);
     }
 
-    @CacheEvict(value = "tasks", key = "#id")
+    @CacheEvict(value = CACHE_NAME, key = "#id")
     public Task patch(Long id, Map<String, String> updates) {
         Task task = repository.findById(id).orElse(null);
-        if (task == null)
-            return null;
-        if (updates.containsKey("title"))
-            task.setTitle(updates.get("title"));
-        if (updates.containsKey("description"))
-            task.setDescription(updates.get("description"));
-        if (updates.containsKey("status"))
-            task.setStatus(updates.get("status"));
+        if (task == null) return null;
+
+        if (updates.containsKey("title")) task.setTitle(updates.get("title"));
+        if (updates.containsKey("description")) task.setDescription(updates.get("description"));
+        if (updates.containsKey("status")) task.setStatus(updates.get("status"));
 
         return repository.save(task);
     }
 
-    @CacheEvict(value = "tasks", key = "#id")
+    @CacheEvict(value = CACHE_NAME, key = "#id")
     public boolean delete(Long id) {
-        if (!repository.existsById(id))
-            return false;
-        repository.deleteById(id);
-        return true;
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

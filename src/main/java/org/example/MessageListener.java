@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageListener {
 
-    @RabbitListener(queues = "taskQueue")
+    @RabbitListener(queues = TaskService.TASK_QUEUE)
     public void listen(String message) {
-        System.out.println(" [RabbitMQ] Message received from the queue: " + message);
+        System.out.println(" [RabbitMQ] Message received: " + message);
     }
 }

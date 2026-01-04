@@ -3,21 +3,32 @@ server:
 
 spring:
   application:
-    name: todo-monolith
+    name: todo-list
 
   datasource:
-    url: jdbc:sqlite:tasks.db
-    driver-class-name: org.sqlite.JDBC
-    username: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/todo_db}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
   jpa:
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
 
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+  cache:
+    type: redis
+
   rabbitmq:
-    addresses: amqps://waastaxd:4qF4dGv1OxcQZk7Mf7Ih5_tIuvdJ0urs@stingray.rmq.cloudamqp.com/waastaxd
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: guest
+    password: guest
 
 management:
   endpoints:
